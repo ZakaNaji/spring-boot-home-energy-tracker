@@ -20,8 +20,27 @@ services:
     networks:
       - home-energy-network
 
+  device-service-db:
+    image: postgres:17
+    container_name: device-service-db
+    environment:
+      POSTGRES_DB: device_service_db
+      POSTGRES_USER: device_service_user
+      POSTGRES_PASSWORD: device_service_password
+    ports:
+      - "5434:5432"
+    volumes:
+      - device_service_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U device_service_user -d device_service_db" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - home-energy-network
 volumes:
   user_service_db_data:
+  device_service_db_data:
 
 networks:
   home-energy-network:

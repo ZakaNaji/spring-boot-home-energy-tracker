@@ -1,3 +1,28 @@
+server:
+  port: 8082
+
 spring:
-  application:
-    name: device-service
+  datasource:
+    url: jdbc:postgresql://localhost:5434/device_service_db
+    username: device_service_user
+    password: device_service_password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+user-service:
+  base-url: http://localhost:8081
+
+logging:
+  level:
+    com.znaji.deviceservice: DEBUG
