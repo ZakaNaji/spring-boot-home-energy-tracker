@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  user-service-db:
+    image: postgres:17
+    container_name: user-service-db
+    environment:
+      POSTGRES_DB: user_service_db
+      POSTGRES_USER: user_service_user
+      POSTGRES_PASSWORD: user_service_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - user_service_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user_service_user -d user_service_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - home-energy-network
+
+volumes:
+  user_service_db_data:
+
+networks:
+  home-energy-network:
+    driver: bridge
