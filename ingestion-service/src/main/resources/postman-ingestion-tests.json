@@ -1,0 +1,300 @@
+{
+  "info": {
+    "name": "Ingestion Service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Ingest Reading - Success",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"deviceId\": {{deviceId}},\n  \"timestamp\": \"2026-04-13T14:00:00Z\",\n  \"powerWatts\": 420.5\n}"
+        },
+        "url": {
+          "raw": "{{ingestionServiceBaseUrl}}/api/readings",
+          "host": [
+            "{{ingestionServiceBaseUrl}}"
+          ],
+          "path": [
+            "api",
+            "readings"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 202\", function () {",
+              "    pm.response.to.have.status(202);",
+              "});",
+              "",
+              "const response = pm.response.json();",
+              "",
+              "pm.test(\"Response contains message\", function () {",
+              "    pm.expect(response.message).to.eql(\"Reading ingested successfully\");",
+              "});",
+              "",
+              "pm.test(\"Response contains eventId\", function () {",
+              "    pm.expect(response.eventId).to.exist;",
+              "});",
+              "",
+              "pm.collectionVariables.set(\"lastIngestionEventId\", response.eventId);"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "Ingest Reading - Validation Error Missing Device Id",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"timestamp\": \"2026-04-13T14:00:00Z\",\n  \"powerWatts\": 420.5\n}"
+        },
+        "url": {
+          "raw": "{{ingestionServiceBaseUrl}}/api/readings",
+          "host": [
+            "{{ingestionServiceBaseUrl}}"
+          ],
+          "path": [
+            "api",
+            "readings"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 400\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "Ingest Reading - Validation Error Negative Power",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"deviceId\": {{deviceId}},\n  \"timestamp\": \"2026-04-13T14:00:00Z\",\n  \"powerWatts\": -10\n}"
+        },
+        "url": {
+          "raw": "{{ingestionServiceBaseUrl}}/api/readings",
+          "host": [
+            "{{ingestionServiceBaseUrl}}"
+          ],
+          "path": [
+            "api",
+            "readings"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 400\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "Ingest Reading - Validation Error Missing Timestamp",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"deviceId\": {{deviceId}},\n  \"powerWatts\": 350.0\n}"
+        },
+        "url": {
+          "raw": "{{ingestionServiceBaseUrl}}/api/readings",
+          "host": [
+            "{{ingestionServiceBaseUrl}}"
+          ],
+          "path": [
+            "api",
+            "readings"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 400\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "Ingest Reading - Device Not Found",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"deviceId\": 999999,\n  \"timestamp\": \"2026-04-13T14:00:00Z\",\n  \"powerWatts\": 500.0\n}"
+        },
+        "url": {
+          "raw": "{{ingestionServiceBaseUrl}}/api/readings",
+          "host": [
+            "{{ingestionServiceBaseUrl}}"
+          ],
+          "path": [
+            "api",
+            "readings"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 400\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "Ingest Reading - Malformed JSON",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"deviceId\": {{deviceId}},\n  \"timestamp\": \"2026-04-13T14:00:00Z\",\n  \"powerWatts\": 420.5,\n}"
+        },
+        "url": {
+          "raw": "{{ingestionServiceBaseUrl}}/api/readings",
+          "host": [
+            "{{ingestionServiceBaseUrl}}"
+          ],
+          "path": [
+            "api",
+            "readings"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 400\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "Ingest Reading - Zero Power Success",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"deviceId\": {{deviceId}},\n  \"timestamp\": \"2026-04-13T14:05:00Z\",\n  \"powerWatts\": 0\n}"
+        },
+        "url": {
+          "raw": "{{ingestionServiceBaseUrl}}/api/readings",
+          "host": [
+            "{{ingestionServiceBaseUrl}}"
+          ],
+          "path": [
+            "api",
+            "readings"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 202\", function () {",
+              "    pm.response.to.have.status(202);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "response": []
+    }
+  ]
+}
