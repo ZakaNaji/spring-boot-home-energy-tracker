@@ -1,3 +1,20 @@
-spring:
-  application:
-    name: simulator-service
+server:
+  port: 8084
+
+device-service:
+  base-url: http://localhost:8082
+
+ingestion-service:
+  base-url: http://localhost:8083
+
+simulator:
+  enabled: false
+  interval-ms: 5000
+  devices-per-cycle: 10
+  spike-probability: 0.05
+  spike-multiplier-min: 1.5
+  spike-multiplier-max: 2.5
+
+logging:
+  level:
+    com.znaji.simulatorservice: DEBUG
