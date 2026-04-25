@@ -28,12 +28,12 @@ app:
   kafka:
     topics:
       energy-reading-ingested: energy.readings.ingested
-      energy-anomaly-detected: energy.anomalies.detected
+      user-usage-threshold-exceeded: energy.usage.threshold.exceeded
 
   anomaly:
     enabled: true
-    scan-interval-ms: 30000
-    startup-lookback-minutes: 10
+    scan-interval-ms: 60000
+    window-minutes: 5
 
 logging:
   level:

@@ -16,7 +16,7 @@ public class KafkaConfig {
 
     @Bean
     public NewTopic energyAnomalyDetectedTopic(
-            @Value("${app.kafka.topics.energy-anomaly-detected}") String topicName
+            @Value("${app.kafka.topics.user-usage-threshold-exceeded}") String topicName
     ) {
         return new NewTopic(topicName, 1, (short) 1);
     }
