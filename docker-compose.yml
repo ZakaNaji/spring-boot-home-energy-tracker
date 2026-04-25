@@ -13,7 +13,7 @@ services:
     volumes:
       - user_service_db_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U user_service_user -d user_service_db"]
+      test: [ "CMD-SHELL", "pg_isready -U user_service_user -d user_service_db" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -38,6 +38,26 @@ services:
       retries: 5
     networks:
       - home-energy-network
+
+  influxdb:
+    image: influxdb:2.7
+    container_name: influxdb
+    ports:
+      - "8086:8086"
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: admin
+      DOCKER_INFLUXDB_INIT_PASSWORD: admin123456
+      DOCKER_INFLUXDB_INIT_ORG: home-energy
+      DOCKER_INFLUXDB_INIT_BUCKET: usage-bucket
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: usage-service-token
+    volumes:
+      - influxdb2-data:/var/lib/influxdb2
+      - influxdb2-config:/etc/influxdb2
+    networks:
+      - home-energy-network
+
+
   kafka:
     image: apache/kafka:4.1.0
     container_name: kafka
@@ -76,6 +96,8 @@ services:
 volumes:
   user_service_db_data:
   device_service_db_data:
+  influxdb2-data:
+  influxdb2-config:
 
 networks:
   home-energy-network:
