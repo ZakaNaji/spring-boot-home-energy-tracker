@@ -21,6 +21,9 @@ influx:
   org: home-energy
   bucket: usage-bucket
 
+user-service:
+  base-url: http://localhost:8081
+
 app:
   kafka:
     topics:
