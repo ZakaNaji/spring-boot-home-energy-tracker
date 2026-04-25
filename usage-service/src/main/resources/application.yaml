@@ -1,3 +1,37 @@
+server:
+  port: 8085
+
 spring:
-  application:
-    name: usage-service
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: usage-service-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "com.znaji.*"
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+influx:
+  url: http://localhost:8086
+  token: usage-service-token
+  org: home-energy
+  bucket: usage-bucket
+
+app:
+  kafka:
+    topics:
+      energy-reading-ingested: energy.readings.ingested
+      energy-anomaly-detected: energy.anomalies.detected
+
+  anomaly:
+    enabled: true
+    scan-interval-ms: 30000
+    startup-lookback-minutes: 10
+
+logging:
+  level:
+    com.znaji.usageservice: DEBUG
