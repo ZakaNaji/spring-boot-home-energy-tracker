@@ -4,6 +4,7 @@ package com.znaji.userservice.service;
 import com.znaji.userservice.domain.User;
 import com.znaji.userservice.dto.CreateUserRequest;
 import com.znaji.userservice.dto.UpdateUserRequest;
+import com.znaji.userservice.dto.UserAlertPreferenceResponse;
 import com.znaji.userservice.dto.UserResponse;
 import com.znaji.userservice.exception.DuplicateEmailException;
 import com.znaji.userservice.exception.UserNotFoundException;
@@ -63,6 +64,13 @@ public class UserService {
     public void deleteUser(Long id) {
         User user = findUserById(id);
         userRepository.delete(user);
+    }
+
+    public List<UserAlertPreferenceResponse> getEnabledAlertPreferences() {
+        return userRepository.findByAlertingEnabledTrue()
+                .stream()
+                .map(userMapper::toAlertPreferenceResponse)
+                .toList();
     }
 
     private User findUserById(Long id) {

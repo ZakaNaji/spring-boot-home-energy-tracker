@@ -4,6 +4,7 @@ package com.znaji.userservice.mapper;
 import com.znaji.userservice.domain.User;
 import com.znaji.userservice.dto.CreateUserRequest;
 import com.znaji.userservice.dto.UpdateUserRequest;
+import com.znaji.userservice.dto.UserAlertPreferenceResponse;
 import com.znaji.userservice.dto.UserResponse;
 import org.springframework.stereotype.Component;
 
@@ -37,6 +38,14 @@ public class UserMapper {
                 user.getSurname(),
                 user.getEmail(),
                 user.getAddress(),
+                user.getAlertingEnabled(),
+                user.getEnergyAlertThreshold()
+        );
+    }
+
+    public UserAlertPreferenceResponse toAlertPreferenceResponse(User user) {
+        return new UserAlertPreferenceResponse(
+                user.getId(),
                 user.getAlertingEnabled(),
                 user.getEnergyAlertThreshold()
         );

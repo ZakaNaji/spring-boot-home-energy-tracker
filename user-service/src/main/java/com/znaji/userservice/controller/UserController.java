@@ -3,6 +3,7 @@ package com.znaji.userservice.controller;
 
 import com.znaji.userservice.dto.CreateUserRequest;
 import com.znaji.userservice.dto.UpdateUserRequest;
+import com.znaji.userservice.dto.UserAlertPreferenceResponse;
 import com.znaji.userservice.dto.UserResponse;
 import com.znaji.userservice.service.UserService;
 import jakarta.validation.Valid;
@@ -45,5 +46,10 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
+    }
+
+    @GetMapping("/alert-preferences/enabled")
+    public List<UserAlertPreferenceResponse> getEnabledAlertPreferences() {
+        return userService.getEnabledAlertPreferences();
     }
 }
