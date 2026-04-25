@@ -1,0 +1,272 @@
+{
+  "info": {
+    "_postman_id": "b7fd3f7a-0b25-4d86-9d5c-fc2dd9e6c501",
+    "name": "Home Energy Tracker - Simulator Service",
+    "description": "Postman collection for simulator-service endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "simulatorServiceBaseUrl",
+      "value": "http://localhost:8084"
+    },
+    {
+      "key": "deviceId",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "Simulator Service",
+      "item": [
+        {
+          "name": "Run Simulation Once - Success",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{simulatorServiceBaseUrl}}/api/simulation/run-once",
+              "host": [
+                "{{simulatorServiceBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "simulation",
+                "run-once"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "",
+                  "pm.test(\"Response contains message\", function () {",
+                  "    pm.expect(response.message).to.exist;",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains readingsSent\", function () {",
+                  "    pm.expect(response.readingsSent).to.be.a('number');",
+                  "    pm.expect(response.readingsSent).to.be.greaterThan(0);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Run Simulation Batch - Success",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{simulatorServiceBaseUrl}}/api/simulation/run-batch?count=10",
+              "host": [
+                "{{simulatorServiceBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "simulation",
+                "run-batch"
+              ],
+              "query": [
+                {
+                  "key": "count",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "",
+                  "pm.test(\"Response contains readingsSent\", function () {",
+                  "    pm.expect(response.readingsSent).to.be.a('number');",
+                  "    pm.expect(response.readingsSent).to.be.greaterThan(0);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Run Simulation Batch - Large Count",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{simulatorServiceBaseUrl}}/api/simulation/run-batch?count=500",
+              "host": [
+                "{{simulatorServiceBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "simulation",
+                "run-batch"
+              ],
+              "query": [
+                {
+                  "key": "count",
+                  "value": "500"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "",
+                  "pm.test(\"Response contains readingsSent\", function () {",
+                  "    pm.expect(response.readingsSent).to.be.a('number');",
+                  "    pm.expect(response.readingsSent).to.be.greaterThan(0);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Inject Spike - Success",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{simulatorServiceBaseUrl}}/api/simulation/spike?deviceId={{deviceId}}",
+              "host": [
+                "{{simulatorServiceBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "simulation",
+                "spike"
+              ],
+              "query": [
+                {
+                  "key": "deviceId",
+                  "value": "{{deviceId}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "",
+                  "pm.test(\"Spike response contains readingsSent = 1\", function () {",
+                  "    pm.expect(response.readingsSent).to.eql(1);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Inject Spike - Device Not Found",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{simulatorServiceBaseUrl}}/api/simulation/spike?deviceId=999999",
+              "host": [
+                "{{simulatorServiceBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "simulation",
+                "spike"
+              ],
+              "query": [
+                {
+                  "key": "deviceId",
+                  "value": "999999"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Inject Spike - Missing Device Id",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{simulatorServiceBaseUrl}}/api/simulation/spike",
+              "host": [
+                "{{simulatorServiceBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "simulation",
+                "spike"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 400 or 500 depending on handler setup\", function () {",
+                  "    pm.expect([400, 500]).to.include(pm.response.code);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    }
+  ]
+}
